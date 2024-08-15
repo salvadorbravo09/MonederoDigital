@@ -39,6 +39,15 @@ public class ExpenseServiceImpl implements ExpenseService {
         return saveOrUpdateExpense(new Expense(), expenseDTO);
     }
 
+    public Expense updateExpense(Long id, ExpenseDTO expenseDTO) {
+        Optional<Expense> optionalExpense = expenseRepository.findById(id);
+        if (optionalExpense.isPresent()) {
+            return saveOrUpdateExpense(optionalExpense.get(), expenseDTO);
+        } else {
+            throw new EntityNotFoundException("Expense is not present with id " + id);
+        }
+    }
+
     // Metodos privados
     private Expense saveOrUpdateExpense(Expense expense, ExpenseDTO expenseDTO) {
         expense.setTitle(expenseDTO.getTitle());
