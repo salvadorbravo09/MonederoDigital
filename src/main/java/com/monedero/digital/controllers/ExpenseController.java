@@ -3,6 +3,7 @@ package com.monedero.digital.controllers;
 import com.monedero.digital.dtos.ExpenseDTO;
 import com.monedero.digital.entities.Expense;
 import com.monedero.digital.services.ExpenseService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,17 @@ public class ExpenseController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllExpenses() {
         return ResponseEntity.status(HttpStatus.OK).body(expenseService.getAllExpenses());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getExpenseById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(expenseService.getExpenseById(id));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
+        }
     }
 
     @PostMapping
