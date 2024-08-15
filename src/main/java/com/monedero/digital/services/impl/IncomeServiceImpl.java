@@ -7,6 +7,11 @@ import com.monedero.digital.services.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class IncomeServiceImpl implements IncomeService {
@@ -14,6 +19,14 @@ public class IncomeServiceImpl implements IncomeService {
     private final IncomeRepository incomeRepository;
 
     // Metodos publicos
+    public List<IncomeDTO> getAllIncomes() {
+        return incomeRepository.findAll().stream()
+                .sorted(Comparator.comparing(Income::getDate).reversed())
+                .map(Income::getIncomeDto)
+                .collect(Collectors.toList());
+    }
+
+
     public Income postIncome(IncomeDTO incomeDTO) {
         return saveOrUpdateIncome(new Income(), incomeDTO);
     }
