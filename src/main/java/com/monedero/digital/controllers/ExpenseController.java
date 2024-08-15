@@ -16,6 +16,11 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllExpenses() {
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.getAllExpenses());
+    }
+
     @PostMapping
     public ResponseEntity<?> postExpense(@RequestBody ExpenseDTO expenseDTO) {
         Expense createdExpense = expenseService.postExpense(expenseDTO);
