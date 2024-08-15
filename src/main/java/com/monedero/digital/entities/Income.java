@@ -1,5 +1,6 @@
 package com.monedero.digital.entities;
 
+import com.monedero.digital.dtos.IncomeDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,4 +26,16 @@ public class Income {
     private LocalDate date;
 
     private Integer amount;
+
+    public IncomeDTO getIncomeDto() {
+        IncomeDTO incomeDTO = new IncomeDTO();
+        incomeDTO.setId(id);
+        incomeDTO.setTitle(title);
+        incomeDTO.setAmount(amount);
+        incomeDTO.setCategory(category);
+        incomeDTO.setDescription(description);
+        incomeDTO.setDate(date);
+
+        return incomeDTO;
+    }
 }
