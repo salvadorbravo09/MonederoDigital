@@ -16,6 +16,11 @@ public class IncomeController {
 
     private final IncomeService incomeService;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllIncomes() {
+        return ResponseEntity.status(HttpStatus.OK).body(incomeService.getAllIncomes());
+    }
+
     @PostMapping
     public ResponseEntity<?> postIncome(@RequestBody IncomeDTO incomeDTO) {
         Income createdIncome = incomeService.postIncome(incomeDTO);
