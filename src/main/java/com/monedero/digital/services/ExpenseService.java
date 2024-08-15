@@ -14,4 +14,6 @@ public interface ExpenseService {
     Expense postExpense(ExpenseDTO expenseDTO);
 
     Expense updateExpense(Long id, ExpenseDTO expenseDTO);
+
+    void deleteExpense(Long id);
 }
