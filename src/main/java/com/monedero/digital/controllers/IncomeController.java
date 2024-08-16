@@ -3,6 +3,7 @@ package com.monedero.digital.controllers;
 import com.monedero.digital.dtos.IncomeDTO;
 import com.monedero.digital.entities.Income;
 import com.monedero.digital.services.IncomeService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,17 @@ public class IncomeController {
         return ResponseEntity.status(HttpStatus.OK).body(incomeService.getAllIncomes());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getIncomeById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(incomeService.getIncomeById(id));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> postIncome(@RequestBody IncomeDTO incomeDTO) {
         Income createdIncome = incomeService.postIncome(incomeDTO);
@@ -28,6 +40,17 @@ public class IncomeController {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdIncome);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateIncome(@PathVariable Long id, @RequestBody IncomeDTO incomeDTO) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(incomeService.updateIncome(id, incomeDTO));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
         }
     }
 }

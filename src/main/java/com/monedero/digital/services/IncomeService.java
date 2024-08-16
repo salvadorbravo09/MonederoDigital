@@ -9,7 +9,11 @@ public interface IncomeService {
 
     List<IncomeDTO> getAllIncomes();
 
-
+    IncomeDTO getIncomeById(Long id);
 
     Income postIncome(IncomeDTO incomeDTO);
+
+    Income updateIncome(Long id, IncomeDTO incomeDTO);
+
+
 }

@@ -4,12 +4,13 @@ import com.monedero.digital.dtos.IncomeDTO;
 import com.monedero.digital.entities.Income;
 import com.monedero.digital.repositories.IncomeRepository;
 import com.monedero.digital.services.IncomeService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +27,27 @@ public class IncomeServiceImpl implements IncomeService {
                 .collect(Collectors.toList());
     }
 
+    public IncomeDTO getIncomeById(Long id) {
+        Optional<Income> optionalIncome = incomeRepository.findById(id);
+        if (optionalIncome.isPresent()) {
+            return optionalIncome.get().getIncomeDto();
+        } else {
+            throw new EntityNotFoundException("Income is not present with id " + id);
+        }
+    }
+
 
     public Income postIncome(IncomeDTO incomeDTO) {
         return saveOrUpdateIncome(new Income(), incomeDTO);
+    }
+
+    public Income updateIncome(Long id, IncomeDTO incomeDTO) {
+        Optional<Income> optionalIncome = incomeRepository.findById(id);
+        if (optionalIncome.isPresent()) {
+            return saveOrUpdateIncome(optionalIncome.get(), incomeDTO);
+        } else {
+            throw new EntityNotFoundException("Income is not present with id " + id);
+        }
     }
 
     // Metodos privados
